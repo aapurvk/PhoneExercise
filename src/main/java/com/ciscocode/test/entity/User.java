@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -57,10 +56,7 @@ public class User {
 	@Pattern(regexp="^\\+(353|44)(\\s*\\d){9,12}$", message="Mobile number is invalid")
 	private String preferredPhoneNumber;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "user_phone",	
-				joinColumns = @JoinColumn(name = "user_id"),
-				inverseJoinColumns = @JoinColumn(name = "phone_id"))
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	@JsonIgnore
 	private List<Phone> phone;
 	
@@ -127,13 +123,6 @@ public class User {
 	public String toString() {
 		return "User [userId=" + userId + ", userName=" + userName + ", password=" + password + ", emailAddress="
 				+ emailAddress + ", preferredPhoneNumber=" + preferredPhoneNumber + "]";
-	}
-	
-	public void add(Phone tempPhone) {
-		if (phone == null) {
-			phone = new ArrayList<>();
-		}
-		phone.add(tempPhone);
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.ciscocode.test.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +22,7 @@ public class UserServiceImpl implements UserService {
 	private static final Logger LOGGER=LoggerFactory.getLogger(UserServiceImpl.class);
 	
 	private UserDAO theUserDAO;
+	private User tempUser;
 	
 	@Autowired
 	public UserServiceImpl(UserDAO theUserDAO) {
@@ -89,7 +91,11 @@ public class UserServiceImpl implements UserService {
 	public void savePhone(UUID userId ,Phone thePhone) {
 		
 		LOGGER.info(getClass() + ">> Save phone details for user id - " +userId);
-		theUserDAO.savePhone(userId, thePhone);
+		List<Phone> phoneList = new ArrayList<Phone>();
+		tempUser = findByUserId(userId);
+		phoneList.add(thePhone);
+		thePhone.setUser(tempUser);
+		theUserDAO.savePhone(thePhone);
 	}
 
 	
@@ -101,7 +107,6 @@ public class UserServiceImpl implements UserService {
 	public void deleteUserPhone(UUID userId, UUID phoneId) {
 		
 		LOGGER.info(getClass() + ">> Delete phone details with id - " +phoneId);
-		theUserDAO.deleteUserPhoneMapping(userId, phoneId);
 		theUserDAO.deleteUserPhone(phoneId);
 	}
 

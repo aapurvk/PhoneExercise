@@ -84,13 +84,11 @@ public class UserDAOImpl implements UserDAO {
 	 * Function to add user's phone in the Database
 	 */
 	@Override
-	public void savePhone(UUID userId, Phone thePhone) {
+	public void savePhone(Phone thePhone) {
 		
-		LOGGER.info(getClass() + ">> Save phone number for user with id - " +userId);
+		LOGGER.info(getClass() + ">> Save phone number for user");
 		Session currentSession = theEntityManager.unwrap(Session.class);
-		User theUser = currentSession.get(User.class, userId);
-		theUser.add(thePhone);
-		currentSession.saveOrUpdate(theUser);
+		currentSession.saveOrUpdate(thePhone);
 	}
 
 	
@@ -129,7 +127,7 @@ public class UserDAOImpl implements UserDAO {
 		
 		LOGGER.info(getClass() + ">> Delete phone details with id - " +phoneId);
 		Session currentSession = theEntityManager.unwrap(Session.class);
-		Query theQuery = currentSession.createSQLQuery("delete from phone where phone_id=:phoneId");
+		Query<?> theQuery = currentSession.createQuery("delete from Phone where phone_id=:phoneId");
 		theQuery.setParameter("phoneId", phoneId);
 		theQuery.executeUpdate();
 	}
@@ -141,26 +139,14 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public void deletePhone(List<Phone> thePhone) {
 		
-		LOGGER.info(getClass() + ">> Delete the phone object for the given user ");
+		LOGGER.info(getClass() + ">> Delete the phone object for the given user " +thePhone);
 		Session currentSession = theEntityManager.unwrap(Session.class);
 		for(Phone tempPhone : thePhone) {
-			currentSession.delete(tempPhone);
+			LOGGER.info(getClass() + ">> Delete the phone id - " +tempPhone.getPhoneId());
+			Query theQuery = currentSession.createQuery("delete from Phone where phoneId=:phoneId");
+			theQuery.setParameter("phoneId", tempPhone.getPhoneId());
+			theQuery.executeUpdate();
 		}
-	}
-
-
-	/**
-	 * Function to delete the user phone mapping after for deleting the phone
-	 */
-	@Override
-	public void deleteUserPhoneMapping(UUID userId, UUID phoneId) {
-		
-		LOGGER.info(getClass() + ">> Delete the user phone mapping for giver userId and phoneId ");
-		Session currentSession = theEntityManager.unwrap(Session.class);
-		Query theQuery = currentSession.createSQLQuery("delete from user_phone where user_id =:userId and phone_id =:phoneId");
-		theQuery.setParameter("phoneId", phoneId);
-		theQuery.setParameter("userId", userId);
-		theQuery.executeUpdate();
 	}
 
 }

@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
@@ -48,10 +47,9 @@ public class Phone {
 	@PhoneModel
 	private String phoneModel;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinTable(name = "user_phone",	
-				joinColumns = @JoinColumn(name = "phone_id"),
-				inverseJoinColumns = @JoinColumn(name = "user_id"))
+	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+			 CascadeType.DETACH, CascadeType.REFRESH})
+	@JoinColumn(name="user_detail_id")
 	@JsonIgnore
 	private User user;
 	

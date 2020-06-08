@@ -16,7 +16,7 @@ public interface UserDAO {
 
 	public List<User> getAllUsers();
 
-	public void savePhone(UUID userId, Phone thePhone);
+	public void savePhone(Phone phoneList);
 
 	public Phone findPhoneById(UUID phoneId);
 
@@ -25,7 +25,5 @@ public interface UserDAO {
 	public void deleteUserPhone(UUID phoneId);
 
 	public void deletePhone(List<Phone> thePhone);
-
-	public void deleteUserPhoneMapping(UUID userId, UUID phoneId);
 
 }
